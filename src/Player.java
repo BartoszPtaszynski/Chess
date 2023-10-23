@@ -9,14 +9,25 @@ public class Player {
     LinkedList<Figure> figuresAlive;
     LinkedList<Figure> figuresLost;
 
-    public Player(Color color, List figuresList)
+
+    public Player(Color color)
     {
         this.color=color;
-        figuresAlive=new LinkedList<>(figuresList);
+        figuresAlive=new LinkedList<>();
         figuresLost=new LinkedList<>();
     }
+    public void addFigure(Figure figure)
+    {
+        figuresAlive.add(figure);
+    }
+    public void addFigure(List figures)
+    {
+        figuresAlive.addAll(figures);
+    }
 
+    public void moveFigure(Figure figure,int X,int Y)
+    {
 
-
+    }
 
 }
