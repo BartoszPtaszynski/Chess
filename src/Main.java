@@ -5,8 +5,7 @@ public class Main {
 
 
         Game board=new Game();
-        board.printBoard();
-
+        board.playGame();
 
         }
 }

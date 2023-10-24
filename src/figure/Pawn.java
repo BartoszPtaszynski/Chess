@@ -15,15 +15,21 @@ public class Pawn extends Figure{
     @Override
     public boolean canMove(char X2, int Y2) {
 
-        if(X2>'G' || X2<'A' || Y2<0 || Y2>8 )
+
+        if(X2>'G' || X2<'A' || Y2<1 || Y2>8 )
         {
             return false;
         }
-        if(Y==Y2 && ((isTop && X2==X+1)|| (!isTop && X2==X-1)) )
+        if((Y==Y2-1 && ((isTop && X2-'A'==X+1)|| (!isTop && X2-'A'==X-1)) )  )
         {
             return true;
         }
+
+
         return false;
     }
+
+
+
 
 }

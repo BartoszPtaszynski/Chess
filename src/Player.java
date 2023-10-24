@@ -6,8 +6,8 @@ import java.util.List;
 
 public class Player {
     Color color;
-    LinkedList<Figure> figuresAlive;
-    LinkedList<Figure> figuresLost;
+    private LinkedList<Figure> figuresAlive;
+    private LinkedList<Figure> figuresLost;
 
 
     public Player(Color color)
@@ -24,10 +24,25 @@ public class Player {
     {
         figuresAlive.addAll(figures);
     }
-
-    public void moveFigure(Figure figure,int X,int Y)
+    public LinkedList<Figure> getFiguresAlive()
     {
-
+        return figuresAlive;
+   }
+    public LinkedList<Figure> getFiguresLost()
+    {
+        return figuresLost;
     }
+
+    public void removeFigure(Figure figure)
+    {
+        if(figuresAlive.contains(figure))
+        {
+            figuresAlive.remove(figure);
+            figuresLost.add(figure);
+        }
+    }
+
+
+
 
 }
