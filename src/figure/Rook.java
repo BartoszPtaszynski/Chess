@@ -16,7 +16,7 @@ public class Rook extends Figure{
     public boolean canMove(char X2, int Y2) {
 
 
-        if(X2>'G' || X2<'A' || Y2<1 || Y2>8 || (X2-'A'!=X && (Y2-1)!=Y))
+        if(X2>'H' || X2<'A' || Y2<1 || Y2>8 )
         {
             return false;
         }

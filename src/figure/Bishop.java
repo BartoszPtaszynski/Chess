@@ -12,7 +12,7 @@ public class Bishop extends Figure{
 
     @Override
     public boolean canMove(char X2, int Y2) {
-        if(X2>'G' || X2<'A' || Y2<1 || Y2>8 )
+        if(X2>'H' || X2<'A' || Y2<1 || Y2>8 )
         {
             return false;
         }

@@ -27,6 +27,7 @@ public class Game {
         }
         player1.addFigure(List.of(new Rook(0,7),new Rook(0,0),new Knight(0,1),new Knight(0,6),
                 new Bishop(0,2),new Bishop(0,5),new King(0,4),new Queen(0,3)));
+        player1.addFigure(new Pawn(5,4));
 
         player2.addFigure(List.of(new Rook(7,7),new Rook(7,0),new Knight(7,1),new Knight(7,6),
                 new Bishop(7,2),new Bishop(7,5),new King(7,4),new Queen(7,3)));
@@ -65,53 +66,60 @@ public class Game {
         System.out.print("-".repeat(39)+"\n");
     }
 
-    private void moveFigure(Player player,Figure figure,char X,int Y)
+    private boolean moveFigure(Player player,Figure figure,char X,int Y)
     {
         if(player.getFiguresAlive().contains(figure)) {
             if (player == player1) {
-                moveFigureConditions(figure, player1, player2, X, Y);
+               return  moveFigureConditions(figure, player1, player2, X, Y);
             } else {
-                moveFigureConditions(figure, player2, player1, X, Y);
+               return moveFigureConditions(figure, player2, player1, X, Y);
 
             }
         }
         else {
-            System.err.println("There are not your figures!");
+            return false;
         }
 
     }
-   private void moveFigureConditions(Figure figure,Player playerPlaying,Player playerWaiting,char X, int Y)
+   private boolean moveFigureConditions(Figure figure,Player playerPlaying,Player playerWaiting,char X, int Y)
    {
        int x=X-'A';
+
+       if(figure instanceof Pawn p && !p.canMove(X,Y))
+       {
+           if(((p.isTop() && p.getX()==x-1) || (!p.isTop() && p.getX()==x+1)) && Math.abs(p.getY()-(Y-1))==1  && playerWaiting.getFiguresAlive().contains(board[x][Y-1]))
+           {
+               playerWaiting.removeFigure(board[x][Y-1]);
+               figure.setX(x);
+               figure.setY(Y-1);
+               return true;
+           }
+       }
 
        if(figure.canMove(X,Y) /*&& player.equals(player1)*/)
        {
            if(playerWaiting.getFiguresAlive().contains(board[x][Y-1]))
            {
+               if(figure instanceof Pawn)
+               {
+                   return  false;
+               }
                playerWaiting.removeFigure(board[x][Y-1]);
            }
            else if(playerPlaying.getFiguresAlive().contains(board[x][Y-1]))
            {
-               System.out.println("can;t move there");
-               return;
+               return false;
            }
            figure.setX(x);
            figure.setY(Y-1);
+           return  true;
 
        }
-       else if(figure instanceof Pawn p)
-       {
-           if(p.getX()-X==1 && playerWaiting.getFiguresAlive().contains(board[x][Y-1]))
-           {
-               figure.setX(x);
-               figure.setY(Y-1);
-           }
-       }
-       else
-       {
-           System.err.println("You can't move this way");
-       }
+
+
+
        refreshBoard();
+       return false;
    }
 
     private void refreshBoard()
@@ -174,9 +182,16 @@ public class Game {
 
             x2=coordinates.charAt(0);
             y2=coordinates.charAt(1)-'0';
-            System.out.println(x1+y1+x2+y2);
-            moveFigure(activePlayer,board[x1][y1],x2,y2);
-            i++;
+            if(moveFigure(activePlayer,board[x1][y1],x2,y2))
+            {
+                System.out.println("Your move has been done!");
+                i++;
+            }
+            else
+            {
+                System.out.println("Bad move!");
+            }
+
 
 
 
@@ -193,5 +208,6 @@ public class Game {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
 
 }

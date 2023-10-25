@@ -42,4 +42,7 @@ public abstract  class Figure {
     }
 
 
+    public boolean isTop() {
+        return isTop;
+    }
 }
