@@ -10,7 +10,6 @@ public class Main {
         try {
             System.setProperty("file.encoding", "UTF-8");
             System.setOut(new PrintStream(System.out, true,  "UTF-8"));
-            System.out.println("Hello, World! ©");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

@@ -27,7 +27,6 @@ public class Game {
         }
         player1.addFigure(List.of(new Rook(0,7),new Rook(0,0),new Knight(0,1),new Knight(0,6),
                 new Bishop(0,2),new Bishop(0,5),new King(0,4),new Queen(0,3)));
-        player1.addFigure(new Pawn(5,4));
 
         player2.addFigure(List.of(new Rook(7,7),new Rook(7,0),new Knight(7,1),new Knight(7,6),
                 new Bishop(7,2),new Bishop(7,5),new King(7,4),new Queen(7,3)));
@@ -96,7 +95,7 @@ public class Game {
            }
        }
 
-       if(figure.canMove(X,Y) /*&& player.equals(player1)*/)
+       if(figure.canMove(X,Y) )
        {
            if(playerWaiting.getFiguresAlive().contains(board[x][Y-1]))
            {
@@ -156,7 +155,7 @@ public class Game {
 
             System.out.print(player1.color.getColor()+"Player 1:\nActive figures:");
             for(Figure figure:player1.getFiguresAlive()) System.out.print(figure.getSign()+" ");
-            System.out.println("\nLost Figures: ");
+            System.out.print("\nLost Figures: ");
             for(Figure figure:player1.getFiguresLost()) System.out.print(figure.getSign()+" ");
             System.out.println();
             System.out.print(player2.color.getColor()+"Player 2:\nActive figures:");
@@ -201,7 +200,7 @@ public class Game {
     }
     private boolean checkCoordinates(String coordinates)
     {
-        return coordinates.length() == 2 && (coordinates.charAt(0) >= 'A' && coordinates.charAt(0) <= 'G' && coordinates.charAt(1) - '0' >= 1 && coordinates.charAt(1) - '0' <= 8);
+        return coordinates.length() == 2 && (coordinates.charAt(0) >= 'A' && coordinates.charAt(0) <= 'H' && coordinates.charAt(1) - '0' >= 1 && coordinates.charAt(1) - '0' <= 8);
     }
 
     private static void clearConsole() {
