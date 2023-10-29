@@ -15,7 +15,7 @@ public class Pawn extends Figure{
 
 
     @Override
-    public boolean canMove(char X2, int Y2) {
+    public boolean canMove(char X2, int Y2,Figure board[][]) {
 
 
         if(X2>'H' || X2<'A' || Y2<1 || Y2>8 )
@@ -26,9 +26,7 @@ public class Pawn extends Figure{
         {
             return true;
         }
-
-
-        return false;
+        return (Y==Y2-1 && ((X==1 && X2-'A'-2==X && board[X+1][Y]==null) || (X==6 && X2-'A'+2==X && board[X-1][Y]==null)));
     }
 
 

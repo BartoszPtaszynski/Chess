@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Game {
     private final int width=8;
-    public Figure[][] board;
+    private Figure[][] board;
 
     private final Player player1;
     private final Player player2;
@@ -84,7 +84,7 @@ public class Game {
    {
        int x=X-'A';
 
-       if(figure instanceof Pawn p && !p.canMove(X,Y))
+       if(figure instanceof Pawn p && !p.canMove(X,Y,board))
        {
            if(((p.isTop() && p.getX()==x-1) || (!p.isTop() && p.getX()==x+1)) && Math.abs(p.getY()-(Y-1))==1  && playerWaiting.getFiguresAlive().contains(board[x][Y-1]))
            {
@@ -95,8 +95,9 @@ public class Game {
            }
        }
 
-       if(figure.canMove(X,Y) )
+       if(figure.canMove(X,Y,board) )
        {
+
            if(playerWaiting.getFiguresAlive().contains(board[x][Y-1]))
            {
                if(figure instanceof Pawn)
@@ -203,10 +204,12 @@ public class Game {
         return coordinates.length() == 2 && (coordinates.charAt(0) >= 'A' && coordinates.charAt(0) <= 'H' && coordinates.charAt(1) - '0' >= 1 && coordinates.charAt(1) - '0' <= 8);
     }
 
-    private static void clearConsole() {
+    private  void clearConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
+
 
 
 }

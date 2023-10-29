@@ -11,7 +11,7 @@ public class King extends Figure{
     }
 
     @Override
-    public boolean canMove(char X2, int Y2) {
+    public boolean canMove(char X2, int Y2,Figure board[][]) {
         if(X2>'H' || X2<'A' || Y2<1 || Y2>8 )
         {
             return false;

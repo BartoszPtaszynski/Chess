@@ -34,7 +34,7 @@ public abstract  class Figure {
         Y = y;
     }
 
-    public abstract boolean canMove(char X2, int Y2);
+    public abstract boolean canMove(char X2, int Y2,Figure board[][]);
 
     public  ArrayList<Point> getRoad(char X2, int Y2)
     {
