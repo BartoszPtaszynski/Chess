@@ -12,17 +12,13 @@ public class Rook extends Figure{
     @Override
     public boolean canMove(char X2, int Y2,Figure board[][]) {
 
-
-        if(X2>'H' || X2<'A' || Y2<1 || Y2>8 )
+        if(X2>'H' || X2<'A' || Y2<1 || Y2>8 ||(X==X2-'A' && Y==Y2-1))
         {
             return false;
         }
         if(X!=X2-'A' && Y!=Y2-1 )return false;
-
         int XDirection=(X2-'A')>X?1:-1;
         int YDirection=(Y2-1>Y)?1:-1;
-
-
         if(X==X2-'A')
         {
             for(int currentY=Y+YDirection;currentY!=Y2-1;currentY+=YDirection)

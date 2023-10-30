@@ -3,7 +3,6 @@ package figure;
 public enum Color {
     BRIGHT,
     DARK;
-
     public String getColor()
     {
         return

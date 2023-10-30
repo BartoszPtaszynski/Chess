@@ -4,15 +4,13 @@ public class Queen extends Figure{
     public Queen(int X, int Y) {
         super(X, Y);
     }
-
     @Override
     public String getSign() {
-        return "\u265B";
+        return "♛";
     }
-
     @Override
-    public boolean canMove(char X2, int Y2,Figure board[][]) {
-        if(X2>'H' || X2<'A' || Y2<1 || Y2>8 )
+    public boolean canMove(char X2, int Y2,Figure[][] board) {
+        if(X2>'H' || X2<'A' || Y2<1 || Y2>8 ||(X==X2-'A' && Y==Y2-1) )
         {
             return false;
         }
@@ -24,7 +22,7 @@ public class Queen extends Figure{
         int currentX=X+XDirection;
         int currentY=Y+YDirection;
 
-        while (currentX != X2 - 'A' && currentY != Y2 - 1) {
+        while (currentX != X2 - 'A' || currentY != Y2 - 1) {
             if (board[currentX][currentY] != null) {
                 return false;
             }

@@ -6,19 +6,13 @@ public class Pawn extends Figure{
         super(X, Y);
     }
 
-
-
     @Override
     public String getSign() {
-        return "\u265f";
+        return "♟";
     }
-
-
     @Override
     public boolean canMove(char X2, int Y2,Figure board[][]) {
-
-
-        if(X2>'H' || X2<'A' || Y2<1 || Y2>8 )
+        if(X2>'H' || X2<'A' || Y2<1 || Y2>8||(X==X2-'A' && Y==Y2-1) )
         {
             return false;
         }

@@ -9,11 +9,10 @@ public class Game {
 
     private final Player player1;
     private final Player player2;
+    boolean isFinished=false;
     public Game()
     {
         board=new Figure[width][width];
-
-
 
         player1=new Player(Color.BRIGHT);
         player2=new Player(Color.DARK);
@@ -23,7 +22,6 @@ public class Game {
         {
             player1.addFigure(new Pawn(1,i));
             player2.addFigure(new Pawn(6,i));
-
         }
         player1.addFigure(List.of(new Rook(0,7),new Rook(0,0),new Knight(0,1),new Knight(0,6),
                 new Bishop(0,2),new Bishop(0,5),new King(0,4),new Queen(0,3)));
@@ -39,8 +37,7 @@ public class Game {
         System.out.print(" ");
         for(int i=1;i<=width;i++)
         {
-            System.out.print("| "+(char)('\uFF11' + i - 1)+" ");
-
+            System.out.print("| "+(char)('１' + i - 1)+" ");
         }
         System.out.print("|\n");
         for(int i=0;i<width;i++)
@@ -70,55 +67,98 @@ public class Game {
         if(player.getFiguresAlive().contains(figure)) {
             if (player == player1) {
                return  moveFigureConditions(figure, player1, player2, X, Y);
+
             } else {
                return moveFigureConditions(figure, player2, player1, X, Y);
-
             }
         }
         else {
             return false;
         }
-
     }
    private boolean moveFigureConditions(Figure figure,Player playerPlaying,Player playerWaiting,char X, int Y)
    {
        int x=X-'A';
 
+       int copyX= figure.getX();
+       int copyY= figure.getY();
+
+
        if(figure instanceof Pawn p && !p.canMove(X,Y,board))
        {
            if(((p.isTop() && p.getX()==x-1) || (!p.isTop() && p.getX()==x+1)) && Math.abs(p.getY()-(Y-1))==1  && playerWaiting.getFiguresAlive().contains(board[x][Y-1]))
            {
+               Figure toKill=board[x][Y-1];
                playerWaiting.removeFigure(board[x][Y-1]);
                figure.setX(x);
                figure.setY(Y-1);
+               refreshBoard();
+               if(isCheck(playerWaiting))
+               {
+                   System.out.println("You cannot go there, cause there is a CHECK!");
+                   figure.setX(copyX);
+                   figure.setY(copyY);
+                   playerWaiting.getFiguresLost().remove(toKill);
+                   playerWaiting.getFiguresAlive().add(toKill);
+
+                   refreshBoard();
+                   return false;
+               }
+
                return true;
            }
        }
-
        if(figure.canMove(X,Y,board) )
        {
-
            if(playerWaiting.getFiguresAlive().contains(board[x][Y-1]))
            {
                if(figure instanceof Pawn)
                {
                    return  false;
                }
+               Figure toKill=board[x][Y-1];
                playerWaiting.removeFigure(board[x][Y-1]);
+               figure.setX(x);
+               figure.setY(Y-1);
+               refreshBoard();
+               if(isCheck(playerWaiting))
+               {
+                   System.out.println("You cannot go there, cause there is a CHECK!");
+                   figure.setX(copyX);
+                   figure.setY(copyY);
+                   playerWaiting.getFiguresLost().remove(toKill);
+                   playerWaiting.getFiguresAlive().add(toKill);
+
+                   refreshBoard();
+                   return false;
+               }
+
+               return true;
+
            }
            else if(playerPlaying.getFiguresAlive().contains(board[x][Y-1]))
            {
                return false;
            }
+
            figure.setX(x);
            figure.setY(Y-1);
+           refreshBoard();
+
+           if(isCheck(playerWaiting))
+           {
+               System.out.println("You cannot go there, cause there is a CHECK!XDDDDD");
+               figure.setX(copyX);
+               figure.setY(copyY);
+               refreshBoard();
+               return false;
+           }
+
            return  true;
 
        }
-
-
-
        refreshBoard();
+
        return false;
    }
 
@@ -148,10 +188,13 @@ public class Game {
         int  x1,y1,y2;
         char x2;
         Scanner scanner=new Scanner(System.in);
+        String communicate="";
         while (true) {
 
             activePlayer=i%2==0?player1:player2;
-            System.out.println("////CHESS GAME////");
+            System.out.println("////CHESS GAME//// - to end game kill king of the opponent");
+            System.out.println(communicate);
+            communicate="";
             printBoard();
 
             System.out.print(player1.color.getColor()+"Player 1:\nActive figures:");
@@ -161,17 +204,24 @@ public class Game {
             System.out.println();
             System.out.print(player2.color.getColor()+"Player 2:\nActive figures:");
             for(Figure figure:player2.getFiguresAlive()) System.out.print(figure.getSign()+" ");
-            System.out.println("\nLost Figures: ");
+            System.out.print("\nLost Figures: ");
             for(Figure figure:player2.getFiguresLost()) System.out.print(figure.getSign()+" ");
             System.out.println("\u001B[97m");
 
 
-            System.out.println((activePlayer.equals(player1)?"Player 1":"Player 2")+" provide coordinates of figure which you want to move: ");
+            System.out.println((activePlayer.equals(player1)?"Player 1":"Player 2")+" provide coordinates of figure which you want to move or provide END to surrender: ");
 
             do{
                 coordinates=scanner.nextLine().toUpperCase();
 
             }while(!checkCoordinates(coordinates));
+
+            if(isFinished)
+            {
+                System.out.println((activePlayer.equals(player1) ? "Player 2" : "Player 1" )+ " won! Thank you for game. ");
+                System.exit(0);
+            }
+
             x1=coordinates.charAt(0)-'A';
             y1=coordinates.charAt(1)-'0'-1;
 
@@ -184,32 +234,37 @@ public class Game {
             y2=coordinates.charAt(1)-'0';
             if(moveFigure(activePlayer,board[x1][y1],x2,y2))
             {
-                System.out.println("Your move has been done!");
+                communicate+=("Your move has been done!\n");
                 i++;
             }
-            else
-            {
-                System.out.println("Bad move!");
-            }
-
-
-
-
-
-
+            else  communicate+=("Bad move!");
+            if(isCheck(activePlayer))  communicate+=("IT IS A CHECK! for "+(activePlayer.equals(player1)?"player 1":"player 2")+"\n");
         }
     }
     private boolean checkCoordinates(String coordinates)
     {
+        if(coordinates.equals("END"))
+        {
+            isFinished=true; return true;
+        }
         return coordinates.length() == 2 && (coordinates.charAt(0) >= 'A' && coordinates.charAt(0) <= 'H' && coordinates.charAt(1) - '0' >= 1 && coordinates.charAt(1) - '0' <= 8);
     }
-
-    private  void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+    private boolean isCheck(Player attacker)
+    {
+        Player deffender=attacker.equals(player1)?player2:player1;
+        int x=0,y=0;
+        for(Figure f:deffender.getFiguresAlive())
+        {
+            if(f instanceof King king)
+            {
+                x=king.getX();y=king.getY();break;
+            }
+        }
+        for(Figure f:attacker.getFiguresAlive())
+        {
+            if(f.canMove((char)(x+'A'),(y+1),board))return true;
+        }
+        return false;
     }
-
-
-
 
 }

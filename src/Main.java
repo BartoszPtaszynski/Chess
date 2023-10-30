@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException;
 
 public class Main {
     public static void main(String[] args) {
-
         //setting UTF to get symbols of figures in console.
         try {
             System.setProperty("file.encoding", "UTF-8");
@@ -13,8 +12,8 @@ public class Main {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Game board=new Game();
-        board.playGame();
+        Game game=new Game();
+        game.playGame();
 
         }
 
