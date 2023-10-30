@@ -86,6 +86,7 @@ public class Game {
 
        if(figure instanceof Pawn p && !p.canMove(X,Y,board))
        {
+           Scanner scanner=new Scanner(System.in);
            if(((p.isTop() && p.getX()==x-1) || (!p.isTop() && p.getX()==x+1)) && Math.abs(p.getY()-(Y-1))==1  && playerWaiting.getFiguresAlive().contains(board[x][Y-1]))
            {
                Figure toKill=board[x][Y-1];
@@ -104,7 +105,7 @@ public class Game {
                    refreshBoard();
                    return false;
                }
-
+               changePawnToFigure(playerPlaying,p);
                return true;
            }
        }
@@ -153,6 +154,7 @@ public class Game {
                refreshBoard();
                return false;
            }
+           if(figure instanceof Pawn p) changePawnToFigure(playerPlaying,p);
 
            return  true;
 
@@ -160,6 +162,28 @@ public class Game {
        refreshBoard();
 
        return false;
+   }
+   private void changePawnToFigure(Player player,Pawn p)
+   {
+           Scanner scanner=new Scanner(System.in);
+           if(p.isTop()&& p.getX()==7 || ((!p.isTop()) && p.getX()==0))
+           {
+               System.out.println("Change your Pawn to KNIGHT/ROOK/BISHOP/QUEEN, to change provide the name");
+               String name="";
+               do{
+                   name=scanner.nextLine().toUpperCase();
+               }while(!List.of("KNIGHT","ROOK","BISHOP","QUEEN").contains(name));
+               switch (name)
+               {
+                   case"KNIGHT"->player.getFiguresAlive().add(new Knight(p.getX(),p.getY()));
+                   case"ROOK"->player.getFiguresAlive().add(new Rook(p.getX(),p.getY()));
+                   case "BISHOP"->player.getFiguresAlive().add(new Bishop(p.getX(),p.getY()));
+                   case "QUEEN"->player.getFiguresAlive().add(new Queen(p.getX(),p.getY()));
+               }
+               player.getFiguresAlive().remove(p);
+               refreshBoard();
+           }
+
    }
 
     private void refreshBoard()
